@@ -6,4 +6,6 @@ import java.util.List;
 public interface PistaRepositorio extends JpaRepository<Pista, Long> {
     List<Pista> findByActiva(boolean activa);
     boolean existsByNombre(String nombre);
+    boolean existsByNombreIgnoreCase(String nombre);
+
 }

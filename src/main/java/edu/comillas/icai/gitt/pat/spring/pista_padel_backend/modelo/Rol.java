@@ -1,5 +1,4 @@
 package edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo;
 
-public enum Rol {
-    USUARIO, ADMIN
-}
+public enum Rol { USER, ADMIN }
+
