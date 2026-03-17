@@ -52,6 +52,7 @@ public class PadelController {
     }
 
     @GetMapping("/reservations")
+
     public List<Reserva> getMyReservations(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {
@@ -80,6 +81,13 @@ public class PadelController {
 
         return reservaService.listarReservasAdmin(courtId, userId, estado, from, to);
     }
+
+    public List<Reserva> getMyReservations() {
+        Usuario actual = getUsuarioLogueado();
+        return reservaService.listarMisReservas(actual);
+    }
+
+
     @DeleteMapping("/reservations/{id}")
     public ResponseEntity<Void> cancelReservation(@PathVariable Long id) {
         Usuario actual = getUsuarioLogueado();

@@ -16,6 +16,7 @@ public interface ReservaRepositorio extends JpaRepository<Reserva, Long> {
     // Para buscar reservas activas de una pista en un día concreto (útil para disponibilidad)
     List<Reserva> findByPista_IdPistaAndFechaReservaAndEstado(Long idPista, LocalDate fechaReserva, EstadoReserva estado);
 
+
     List<Reserva> findByUsuario_IdUsuarioAndFechaReservaBetween(
             Long idUsuario, LocalDate from, LocalDate to
     );
@@ -47,7 +48,8 @@ public interface ReservaRepositorio extends JpaRepository<Reserva, Long> {
             @Param("to") LocalDate to
     );
 
-    // LA MAGIA: Comprueba si existe alguna reserva ACTIVA que se solape con el horario que queremos
+
+    //Comprueba si existe alguna reserva ACTIVA que se solape con el horario que queremos
     @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM Reserva r " +
             "WHERE r.pista = :pista " +
             "AND r.fechaReserva = :fecha " +

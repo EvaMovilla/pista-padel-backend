@@ -19,30 +19,26 @@ public class ReservaService {
 
     public ReservaService(ReservaRepositorio reservaRepositorio, PistaService pistaService) {
         this.reservaRepositorio = reservaRepositorio;
-        this.pistaService = pistaService; // Reutilizamos el servicio de pistas
+        this.pistaService = pistaService;
     }
 
     public Reserva crearReserva(ReservaRequest request, Usuario usuarioLogueado) {
-        // 1. Obtener la pista (lanzará 404 si no existe)
         Pista pista = pistaService.obtenerPista(request.getCourtId());
 
-        // 2. Regla: No reservar pista inactiva
         if (!pista.isActiva()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La pista no está activa para reservas");
         }
 
-        // 3. Calcular la hora de fin
         LocalTime horaFin = request.getStartTime().plusMinutes(request.getDurationMinutes());
 
-        // 4. Regla: No solapamiento  (Usamos la query mágica que creamos en el Repositorio)
         boolean solapado = reservaRepositorio.existeSolapamiento(
                 pista, request.getDate(), request.getStartTime(), horaFin
         );
+
         if (solapado) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "El slot horario ya está ocupado"); // 409
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "El slot horario ya está ocupado");
         }
 
-        // 5. Crear y guardar la reserva
         Reserva reserva = new Reserva();
         reserva.setUsuario(usuarioLogueado);
         reserva.setPista(pista);
@@ -54,10 +50,8 @@ public class ReservaService {
         reserva.setFechaCreacion(LocalDateTime.now());
 
         return reservaRepositorio.save(reserva);
-
     }
 
-    // obtener reserva por id
     public Reserva obtenerReserva(Long idReserva, Usuario usuarioActual) {
         Reserva reserva = reservaRepositorio.findById(idReserva)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
@@ -72,7 +66,6 @@ public class ReservaService {
         return reserva;
     }
 
-    //listado de reservas con filtros
     public List<Reserva> listarMisReservasFiltradas(Usuario usuarioActual, LocalDate from, LocalDate to) {
         if (from != null && to != null && from.isAfter(to)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "'from' no puede ser posterior a 'to'");
@@ -86,7 +79,7 @@ public class ReservaService {
                 to
         );
     }
-    //listado admin con filtros
+
     public List<Reserva> listarReservasAdmin(Long courtId, Long userId, EstadoReserva estado, LocalDate from, LocalDate to) {
         if (from != null && to != null && from.isAfter(to)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "'from' no puede ser posterior a 'to'");
@@ -100,6 +93,7 @@ public class ReservaService {
                 to
         );
     }
+
     public List<Reserva> listarMisReservas(Usuario usuarioLogueado) {
         return reservaRepositorio.findByUsuario_IdUsuario(usuarioLogueado.getIdUsuario());
     }
@@ -108,7 +102,6 @@ public class ReservaService {
         Reserva reserva = reservaRepositorio.findById(reservationId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
 
-        // Regla: Solo dueño (o ADMIN, aunque aquí validamos dueño) puede modificar/cancelar
         if (!reserva.getUsuario().getIdUsuario().equals(usuarioLogueado.getIdUsuario())
                 && usuarioLogueado.getRol() != Rol.ADMIN) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No tienes permiso para cancelar esta reserva");
@@ -119,7 +112,6 @@ public class ReservaService {
     }
 
     public List<Reserva> consultarDisponibilidad(Long idPista, LocalDate fecha) {
-        // Retornamos las reservas activas para que el frontal sepa qué horas están pilladas
         return reservaRepositorio.findByPista_IdPistaAndFechaReservaAndEstado(
                 idPista, fecha, EstadoReserva.ACTIVA
         );
