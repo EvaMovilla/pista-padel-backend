@@ -45,7 +45,7 @@ public class AuthController {
         u.setEmail(request.getEmail());
         u.setTelefono(request.getTelefono());
         u.setPassword(passwordEncoder.encode(request.getPassword()));
-        u.setRol(Rol.USUARIO);
+        u.setRol(Rol.USER);
         u.setFechaRegistro(LocalDateTime.now());
         u.setActivo(true);
 
@@ -89,12 +89,9 @@ public class AuthController {
         ));
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) session.invalidate();
-
-        SecurityContextHolder.clearContext();
-        return ResponseEntity.ok("{\"message\":\"Logout correcto\"}");
+    @PostMapping("/auth/logout")
+    public ResponseEntity<Void> logout() {
+        return ResponseEntity.noContent().build(); // 204
     }
+
 }
