@@ -2,6 +2,7 @@ package edu.comillas.icai.gitt.pat.spring.pista_padel_backend.servicio;
 
 import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.dto.PistaRequest;
 import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.dto.PistaUpdateRequest;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.EstadoReserva;
 import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.Pista;
 import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.PistaRepositorio;
 import jakarta.transaction.Transactional;
@@ -13,6 +14,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.ReservaRepositorio;
+import java.time.LocalDate;
+
 
 @Service
 public class PistaService {
@@ -20,9 +24,11 @@ public class PistaService {
     private static final Logger log = LoggerFactory.getLogger(PistaService.class);
 
     private final PistaRepositorio pistaRepo;
+    private final ReservaRepositorio reservaRepo;
 
-    public PistaService(PistaRepositorio pistaRepo) {
+    public PistaService(PistaRepositorio pistaRepo, ReservaRepositorio reservaRepo) {
         this.pistaRepo = pistaRepo;
+        this.reservaRepo = reservaRepo;
     }
 
     // ===== Lo que ya tenías =====
@@ -80,7 +86,21 @@ public class PistaService {
     @Transactional
     public void delete(Long id) {
         Pista p = obtenerPista(id);
-        pistaRepo.delete(p);
-        log.info("Pista {} eliminada", id);
+
+        // Comprobar si hay reservas futuras activas
+        boolean tieneReservasFuturas = reservaRepo
+                .existsByPista_IdPistaAndFechaReservaAfterAndEstado(
+                        id, LocalDate.now(), EstadoReserva.ACTIVA
+                );
+
+        if (tieneReservasFuturas) {
+            // Desactivación lógica en lugar de borrado físico
+            p.setActiva(false);
+            log.info("Pista desactivada lógicamente (tiene reservas futuras), id={}", id);
+        } else {
+            pistaRepo.delete(p);
+            log.info("Pista eliminada físicamente, id={}", id);
+        }
     }
+
 }

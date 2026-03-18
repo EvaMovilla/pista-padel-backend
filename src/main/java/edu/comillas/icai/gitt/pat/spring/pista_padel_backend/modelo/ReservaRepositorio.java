@@ -14,7 +14,7 @@ public interface ReservaRepositorio extends JpaRepository<Reserva, Long> {
         select r from Reserva r
         where r.pista.idPista = :pistaId
           and r.fechaReserva = :fecha
-          and r.estado = edu.comillas.icai.gitt.pat.spring.EstadoReserva.ACTIVA
+          and r.estado = edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.EstadoReserva.ACTIVA
           and (r.horaInicio < :fin and r.horaFin > :inicio)
     """)
     List<Reserva> findOverlaps(
@@ -84,4 +84,28 @@ public interface ReservaRepositorio extends JpaRepository<Reserva, Long> {
             @Param("pistaId") Long pistaId,
             @Param("usuarioId") Long usuarioId
     );
+
+    // Reservas futuras ACTIVAS de una pista → usado por PistaService.delete()
+    @Query("""
+    select r from Reserva r
+    where r.pista.idPista = :pistaId
+    and r.estado = edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.EstadoReserva.ACTIVA
+    and r.fechaReserva >= :hoy
+    """)
+    List<Reserva> findFuturasByPista(
+            @Param("pistaId") Long pistaId,
+            @Param("hoy") LocalDate hoy
+    );
+
+    // Usado por AvailabilityController y ReservaService.consultarDisponibilidad()
+    List<Reserva> findByPista_IdPistaAndFechaReservaAndEstado(
+            Long idPista, LocalDate fecha, EstadoReserva estado
+    );
+    boolean existsByPista_IdPistaAndFechaReservaAfterAndEstado(
+            Long idPista, LocalDate fecha, EstadoReserva estado
+    );
+
+
+    List<Reserva> findByUsuario_IdUsuario(Long idUsuario);
+
 }

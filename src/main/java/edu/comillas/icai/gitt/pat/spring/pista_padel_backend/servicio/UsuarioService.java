@@ -1,13 +1,16 @@
 package edu.comillas.icai.gitt.pat.spring.pista_padel_backend.servicio;
 
-import edu.comillas.icai.gitt.pat.spring.*;
-import edu.comillas.icai.gitt.pat.spring.dto.UserUpdateRequest;
-import edu.comillas.icai.gitt.pat.spring.Excepciones.*;
-import org.slf4j.*;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.Usuario;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.UsuarioRepositorio;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.Excepciones.ConflictException;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.Excepciones.NotFoundException;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.dto.UserUpdateRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+
 
 @Service
 public class UsuarioService {
