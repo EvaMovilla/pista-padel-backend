@@ -38,7 +38,7 @@ class ReservaServiceTest {
     @Test
     void crearReserva_lanza409_siHaySolapamiento() {
         // given
-        Usuario usuario = crearUsuario(1L, Rol.USUARIO);
+        Usuario usuario = crearUsuario(1L, Rol.USER);
         Pista pista = crearPista(10L, true);
 
         ReservaRequest req = new ReservaRequest();
@@ -66,7 +66,7 @@ class ReservaServiceTest {
     @Test
     void cancelarReserva_permiteCancelar_siEsElDueno() {
         // given
-        Usuario usuario = crearUsuario(1L, Rol.USUARIO);
+        Usuario usuario = crearUsuario(1L, Rol.USER);
         Pista pista = crearPista(10L, true);
         Reserva reserva = crearReserva(100L, usuario, pista);
 
@@ -83,7 +83,7 @@ class ReservaServiceTest {
     @Test
     void cancelarReserva_permiteCancelar_siEsAdmin() {
         // given
-        Usuario dueno = crearUsuario(1L, Rol.USUARIO);
+        Usuario dueno = crearUsuario(1L, Rol.USER);
         Usuario admin = crearUsuario(99L, Rol.ADMIN);
         Pista pista = crearPista(10L, true);
         Reserva reserva = crearReserva(100L, dueno, pista);
@@ -101,8 +101,8 @@ class ReservaServiceTest {
     @Test
     void cancelarReserva_lanza403_siNoTienePermisos() {
         // given
-        Usuario dueno = crearUsuario(1L, Rol.USUARIO);
-        Usuario otro = crearUsuario(2L, Rol.USUARIO);
+        Usuario dueno = crearUsuario(1L, Rol.USER);
+        Usuario otro = crearUsuario(2L, Rol.USER);
         Pista pista = crearPista(10L, true);
         Reserva reserva = crearReserva(100L, dueno, pista);
 
@@ -119,7 +119,7 @@ class ReservaServiceTest {
     @Test
     void obtenerReserva_devuelveReserva_siEsElDueno() {
         // given
-        Usuario usuario = crearUsuario(1L, Rol.USUARIO);
+        Usuario usuario = crearUsuario(1L, Rol.USER);
         Pista pista = crearPista(10L, true);
         Reserva reserva = crearReserva(100L, usuario, pista);
 
@@ -135,7 +135,7 @@ class ReservaServiceTest {
     @Test
     void obtenerReserva_devuelveReserva_siEsAdmin() {
         // given
-        Usuario dueno = crearUsuario(1L, Rol.USUARIO);
+        Usuario dueno = crearUsuario(1L, Rol.USER);
         Usuario admin = crearUsuario(99L, Rol.ADMIN);
         Pista pista = crearPista(10L, true);
         Reserva reserva = crearReserva(100L, dueno, pista);
@@ -152,8 +152,8 @@ class ReservaServiceTest {
     @Test
     void obtenerReserva_lanza403_siNoTienePermisos() {
         // given
-        Usuario dueno = crearUsuario(1L, Rol.USUARIO);
-        Usuario otro = crearUsuario(2L, Rol.USUARIO);
+        Usuario dueno = crearUsuario(1L, Rol.USER);
+        Usuario otro = crearUsuario(2L, Rol.USER);
         Pista pista = crearPista(10L, true);
         Reserva reserva = crearReserva(100L, dueno, pista);
 
@@ -169,7 +169,7 @@ class ReservaServiceTest {
     @Test
     void listarMisReservasFiltradas_devuelveReservasDelUsuario() {
         // given
-        Usuario usuario = crearUsuario(1L, Rol.USUARIO);
+        Usuario usuario = crearUsuario(1L, Rol.USER);
         Reserva reserva = crearReserva(100L, usuario, crearPista(10L, true));
 
         LocalDate from = LocalDate.of(2025, 3, 1);
@@ -189,7 +189,7 @@ class ReservaServiceTest {
     @Test
     void listarMisReservasFiltradas_lanza400_siFromEsPosteriorATo() {
         // given
-        Usuario usuario = crearUsuario(1L, Rol.USUARIO);
+        Usuario usuario = crearUsuario(1L, Rol.USER);
         LocalDate from = LocalDate.of(2025, 4, 1);
         LocalDate to = LocalDate.of(2025, 3, 1);
 
@@ -203,7 +203,7 @@ class ReservaServiceTest {
     @Test
     void listarReservasAdmin_devuelveReservasFiltradas() {
         // given
-        Usuario usuario = crearUsuario(1L, Rol.USUARIO);
+        Usuario usuario = crearUsuario(1L, Rol.USER);
         Reserva reserva = crearReserva(100L, usuario, crearPista(10L, true));
 
         Long courtId = 10L;

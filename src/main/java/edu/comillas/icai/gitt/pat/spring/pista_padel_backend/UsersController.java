@@ -1,10 +1,10 @@
 package edu.comillas.icai.gitt.pat.spring.pista_padel_backend;
 
-import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.dto.UserUpdateRequest;
-import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.Rol;
 import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.Usuario;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.Rol;
 import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.UsuarioRepositorio;
 import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.servicio.UsuarioService;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.dto.UserUpdateRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;

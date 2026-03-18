@@ -1,15 +1,18 @@
 package edu.comillas.icai.gitt.pat.spring.pista_padel_backend;
 
-import edu.comillas.icai.gitt.pat.spring.*;
-import edu.comillas.icai.gitt.pat.spring.dto.PistaUpdateRequest;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.dto.PistaRequest;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.Rol;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.dto.PistaUpdateRequest;
 import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.Pista;
 import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.Usuario;
 import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.modelo.UsuarioRepositorio;
-import edu.comillas.icai.gitt.pat.spring.servicio.PistaService;
+import edu.comillas.icai.gitt.pat.spring.pista_padel_backend.servicio.PistaService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -47,6 +50,14 @@ public class CourtsController {
         pistaService.delete(courtId);
         return ResponseEntity.noContent().build(); // 204
     }
+
+    // BIEN
+    @PostMapping
+    public ResponseEntity<Pista> createCourt(@RequestBody PistaRequest request, Authentication auth) {
+        requireAdmin(auth);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pistaService.crearPista(request));
+    }
+
 
     private void requireAdmin(Authentication auth) {
         Usuario me = usuarioRepo.findByEmailIgnoreCase(auth.getName()).orElseThrow();
