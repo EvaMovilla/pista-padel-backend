@@ -7,9 +7,11 @@ API REST para la gestión de reservas de pistas de pádel.
 User: SA / Password: (vacío)
 
 ## Roles
-Rol	Permisos
-USER	Ver pistas, crear/cancelar sus propias reservas, editar su perfil
-ADMIN	Todo lo anterior + gestionar pistas y consultar todas las reservas
+|Rol	|Permisos|
+| :--- | :--- |
+|USER	|Ver pistas, crear/cancelar sus propias reservas, editar su perfil|
+|ADMIN |	Todo lo anterior + gestionar pistas y consultar todas las reservas|
+
 ## Endpoints
  Auth
 | Método | Ruta | Cuerpo | Descripción | Respuestas |
