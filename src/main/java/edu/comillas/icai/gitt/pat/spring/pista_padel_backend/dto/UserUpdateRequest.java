@@ -1,48 +1,12 @@
 package edu.comillas.icai.gitt.pat.spring.pista_padel_backend.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 
-public class UserUpdateRequest {
-
-    private String nombre;
-    private String apellidos;
-    private String telefono;
-
-    @Email
-    private String email;
-
-    public UserUpdateRequest() {
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-}
+public record UserUpdateRequest(
+        @Size(min = 1, max = 60) String nombre,
+        @Size(min = 1, max = 80) String apellidos,
+        @Email String email,
+        @Size(min = 6, max = 30) String telefono,
+        Boolean activo
+) {}
