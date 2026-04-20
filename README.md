@@ -1,4 +1,6 @@
 # Pista Padel Backend
+INTEGRANTES: Eva Movilla, Virginia Castejón , Lucía Pérez-Maura
+
 
 API REST para la gestión de reservas de pistas de pádel.  
 
